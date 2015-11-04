@@ -1,4 +1,4 @@
-/*
+
  * Copyright (C) 2015 David Gao <davidgao1001@gmail.com>
  *
  * This program is free software; you can redistribute  it and/or modify it
@@ -17,3 +17,4 @@ vector:
 	b	uart_init
 	b	uart_enable
 	b	uart_spin_puts
+	b   sd_dma_spin_read

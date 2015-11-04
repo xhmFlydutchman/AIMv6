@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2015 David Gao <davidgao1001@gmail.com>
  *
  * This program is free software; you can redistribute  it and/or modify it
@@ -15,8 +15,8 @@
 #include <sys/types.h>
 #include <asm/io.h>
 #include <sleep.h>
-
 #include <drivers/sd/sd-zynq7000.h>
+#include <drivers/serial/uart.h>
 
 /*
  * Initialize the controller.
@@ -276,6 +276,12 @@ int sd_dma_spin_read(u32 pa, u16 count, u32 offset)
 			out16(SD_BASE + SD_ERR_INTR_STS_OFFSET, \
 				SD_ERR_INTR_ALL);
 			return -3;
+		}
+		if (state16 & SD_INTR_DMA) {
+			unsigned int heheda = in32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET);
+			//puthehex(heheda);
+			out16(SD_BASE + SD_NORM_INTR_STS_OFFSET, SD_INTR_DMA);
+			out32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET, heheda);
 		}
 	} while (!(state16 & SD_INTR_TC));
 	/* clean up */
