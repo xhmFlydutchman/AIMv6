@@ -25,6 +25,8 @@ void puthex(u32 num)
     uart_spin_puts(buf);
 }
 
+
+
 void firmware_bootmain(void)
 {
 	int ret;

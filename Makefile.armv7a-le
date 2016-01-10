@@ -32,6 +32,8 @@ CFLAGS		+= -mlittle-endian $(INCFLAG) -DMACH_$(UPPERMACH)
 
 LDFLAGS		=  -EL -O -N
 
+
+
 FIRMWARE_OBJS	=  firmware/arch/$(ARCH)/vector.o \
 		   firmware/arch/$(ARCH)/bootasm.o \
 		   firmware/arch/$(ARCH)/bootmain.o \
@@ -43,9 +45,24 @@ FIRMWARE_OBJS	=  firmware/arch/$(ARCH)/vector.o \
 FIRMWARE_M4	=  firmware/arch/$(ARCH)/firmware.m4 \
 		   firmware/arch/$(ARCH)/$(MACH)/chip.m4 \
 		   firmware/arch/$(ARCH)/$(MACH)/$(BOARD)/board.m4
-
+-+
 MBR_OBJS	=  boot/arch/$(ARCH)/$(MACH)/bootasm.o \
 		   boot/arch/$(ARCH)/$(MACH)/bootmain.o
+
+KERNEL_OBJS	= firmware/arch/$(ARCH)/vector.o \
+			firmware/arch/$(ARCH)/bootasm.o \
+			firmware/arch/$(ARCH)/bootmain.o \
+			drivers/serial/uart-zynq7000.o \
+			drivers/serial/uart.o \
+			drivers/clock/gtc-a9mpcore.o \
+			drivers/sd/sd-zynq7000.o \
+			kern/mm/mmu.o \
+			kern/kernel.o
+
+$(KERNEL_OBJS): EXTRA_CFLAGS = -O2
+
+kernel.elf: $(KERNEL_OBJS)
+	$(LD) $(LDFLAGS) -T kern/kernel.ld -j KERNEL -o $@ $(KERNEL_OBJS)
 
 all: firmware.bin
 
@@ -75,6 +92,8 @@ mbr.s: mbr
 
 mbr.bin: mbr
 	$(OBJCOPY) -O binary -S $^ $@
+
+
 
 clean:
 	rm -f firmware.ld

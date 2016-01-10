@@ -18,6 +18,7 @@
 #include <drivers/sd/sd-zynq7000.h>
 #include <drivers/serial/uart.h>
 
+
 /*
  * Initialize the controller.
  * This can (almost) only be done in polling mode.
@@ -278,10 +279,9 @@ int sd_dma_spin_read(u32 pa, u16 count, u32 offset)
 			return -3;
 		}
 		if (state16 & SD_INTR_DMA) {
-			unsigned int heheda = in32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET);
-			//puthehex(heheda);
+			unsigned int address = in32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET);
 			out16(SD_BASE + SD_NORM_INTR_STS_OFFSET, SD_INTR_DMA);
-			out32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET, heheda);
+			out32(SD_BASE + SD_SDMA_SYS_ADDR_OFFSET, address);
 		}
 	} while (!(state16 & SD_INTR_TC));
 	/* clean up */

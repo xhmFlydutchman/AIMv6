@@ -38,7 +38,7 @@ int main(void)
 	 * 11. Enter idle stage
 	 */
 	printk("Hello from kernel!\r\n");
-
+	
 	/* 0. */
 	setup_arch();
 
